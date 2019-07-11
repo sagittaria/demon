@@ -1,0 +1,37 @@
+<view class="container">
+  <view wx:if="{{impulses.length===0}}" url="/pages/readMe/readMe" class="score-label">Score: {{ score }}</view>
+  <navigator wx:if="{{impulses.length>0}}" url="/pages/readMe/readMe" class="score-label">Score: {{ score }}</navigator>
+  <form bindsubmit="formSubmit">
+    <input class="form-item-input" maxlength="12" name="impulse" value="{{impulse}}" placeholder=" any impulse..."></input>
+    <view class="flex-wrapper">
+      <input class="form-item-input" name="delta" value="{{delta}}" placeholder=" delta(prefix 0 as negtive)" type="number"></input>
+      <button class="form-item-button" form-type="submit" size="mini">
+        Commit <icon type="success_no_circle" size="12"></icon>
+      </button>
+    </view>
+  </form>
+  <view class="trends-area" wx:if="{{impulses.length>=3}}">
+    <canvas canvas-id="trends" class="canvas-trends" style=""></canvas>
+  </view>
+  <scroll-view scroll-y class="impulses-area" wx:if="{{impulses.length>0}}">
+    <view wx:for="{{impulses}}" class="impulse-list-item" wx:key="{{index}}">
+      <view style="width:60px;">{{item.year}}-{{item.month}}-{{item.date}}</view>
+      <view style="width:30px;text-align:right;">{{item.delta>0 ? ('+'+item.delta) : item.delta}}</view>
+      <view style="margin-left:10px;width:140px;">{{item.impulse}}</view>
+    </view>
+  </scroll-view>
+  <scroll-view scroll-y class="impulses-area" style="height: calc(100vh - 125px);" wx:if="{{impulses.length===0}}">
+    <view style="margin-top:8px;">
+      <image class="full-width" src="../../images/1.jpg" mode="widthFix"></image>
+      <image class="full-width" src="../../images/2.jpg" mode="widthFix"></image>
+      <image class="full-width" src="../../images/3.jpg" mode="widthFix"></image>
+      <image class="full-width" src="../../images/4.jpg" mode="widthFix"></image>
+      <image class="full-width" src="../../images/5.jpg" mode="widthFix"></image>
+      <image class="full-width" src="../../images/6.jpg" mode="widthFix"></image>
+      <image class="full-width" src="../../images/7.jpg" mode="widthFix"></image>
+      <view style="text-align:center;padding-bottom:35px;">
+        <text style="font-size:11px;">From: 知乎/question/284206141/answer/722251650</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>
