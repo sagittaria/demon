@@ -31,9 +31,9 @@ Page({
         IMP.where({ _openid: res.result.openid }).orderBy('timeStamp', 'desc').limit(20).get().then(({data})=>{
           if (data.length > 0) {
             self.setData({ impulses: data, score: data[0].score })
-          }
-          if (data.length >= 3) {
-            self.drawTrends(data)
+            if (data.length >= 3) {
+              self.drawTrends(data)
+            }
           }
           wx.hideLoading()
         })
@@ -98,7 +98,7 @@ Page({
     const data = {...e.detail.value}
     if (data.impulse === '' || data.delta === '' || parseInt(data.delta) === 0 || isNaN(data.delta)) {
       // return
-      return wx.showToast({ title: ':)', icon: 'none', mask: true})
+      return wx.showToast({title: ':)', icon: 'none', mask: true})
     }
     data.delta = /0\d*/.test(data.delta) ? (-1) * parseInt(data.delta) : parseInt(data.delta)
     const now = new Date()
@@ -110,27 +110,22 @@ Page({
     data.date = (data.date < 10 ? '0' : '') + data.date
     // console.log(data)
     const _openid = app.globalData.openid
-    wx.showLoading({
-      title: 'loading', mask: true
-    })
+    wx.showLoading({title: 'loading', mask: true})
     IMP.where({_openid}).orderBy('timeStamp','desc').limit(1).get().then(res => { // 新增的时候只取最近的1条即可
       data.score = res.data.length === 0 ? data.delta : (res.data[0].score + data.delta)
-      return data
-    }).then(data => {
       return IMP.add({ data })
-    }).then(res => {
-      const {_id} = {...res}
+    }).then(({_id}) => {
       return IMP.doc(_id).get()
     }).then(({data}) => {
       self.setData({ impulse: '', delta: '', score: data.score })
       const impulses = self.data.impulses
       impulses.unshift(data)
       self.setData({ impulses })
-      wx.hideLoading()
     }).then(() => {
       if (self.data.impulses.length>=3){
         self.drawTrends(self.data.impulses)
       }
+      wx.hideLoading()
     })
   },
   drawTrends: function (impulses) {
