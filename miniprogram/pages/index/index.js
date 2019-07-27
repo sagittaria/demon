@@ -100,7 +100,7 @@ Page({
       // return
       return wx.showToast({title: ':)', icon: 'none', mask: true})
     }
-    data.delta = /0\d*/.test(data.delta) ? (-1) * parseInt(data.delta) : parseInt(data.delta)
+    data.delta = /^0\d*/.test(data.delta) ? (-1) * parseInt(data.delta) : parseInt(data.delta)
     const now = new Date()
     data.timeStamp = now.getTime()
     data.year = '' + (now.getFullYear() % 1000)
@@ -132,11 +132,11 @@ Page({
     const trends = []
     let min = impulses[0].score
     let max = min
-    impulses.forEach((imp, i) => {
+    impulses.forEach(imp => {
       if (imp.score > max) max = imp.score;
       if (imp.score < min) min = imp.score;
     })
-    impulses.forEach((imp, i) => {
+    impulses.forEach(imp => {
       trends.unshift((imp.score * (-1) + max) / (max - min) * 40)
     }) // 先归一化
     let w = wx.getSystemInfoSync().windowWidth * 0.95
